@@ -1,24 +1,30 @@
-import time
-
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-driver = webdriver.Chrome()
+class TestConstructor:
 
-def test_transitions_in_the_constructor():
-    driver.get("https://stellarburgers.nomoreparties.site/")
-    #клик на Соусы
-    driver.find_element(By.XPATH, ".//span[text()='Соусы']").click()
-    time.sleep(1)
-    #клик на Начинки
-    driver.find_element(By.XPATH, ".//span[text()='Начинки']").click()
-    time.sleep(1)
-    #клик на Булки
-    driver.find_element(By.XPATH, ".//span[text()='Булки']").click()
-    time.sleep(1)
+    def test_transitions_in_the_constructor_sauces(self, driver):
+        driver.find_element(By.XPATH, ".//span[text()='Соусы']").click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.element_to_be_clickable((By.XPATH, ".//img[@alt = 'Соус Spicy-X']")))
 
-    assert driver.current_url == "https://stellarburgers.nomoreparties.site/"
+        assert driver.find_element(By.XPATH, ".//h2[text()='Соусы']").text == 'Соусы'
 
-    driver.quit()
+    def test_transitions_in_the_constructor_fillings(self, driver):
+        driver.find_element(By.XPATH, ".//span[text()='Начинки']").click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.element_to_be_clickable((By.XPATH, ".//img[@alt = 'Говяжий метеорит (отбивная)']")))
+
+        assert driver.find_element(By.XPATH, ".//h2[text()='Начинки']").text == 'Начинки'
+
+    def test_transitions_in_the_constructor_buns(self, driver):
+        driver.find_element(By.XPATH, ".//span[text()='Начинки']").click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.element_to_be_clickable((By.XPATH, ".//img[@alt = 'Говяжий метеорит (отбивная)']")))
+        driver.find_element(By.XPATH, ".//span[text()='Булки']").click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.element_to_be_clickable((By.XPATH, ".//img[@alt = 'Флюоресцентная булка R2-D3']")))
+
+        assert driver.find_element(By.XPATH, ".//h2[text()='Булки']").text == 'Булки'
+
