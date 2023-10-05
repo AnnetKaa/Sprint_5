@@ -16,9 +16,3 @@ def driver():
 
     yield browser
     browser.quit()
-
-@pytest.fixture
-def user_credentials():
-    email = "annlevina1111@mail.ru"
-    password = "password123"
-    return email, password
